@@ -1,0 +1,35 @@
+This code is based off of a submission for an X11 project made in a
+university course.  The project was simply to make a game where
+collissions with doughnuts would increase weight and other foods would
+decrease it; the game would end once a low-end weight threshold was passed.
+
+
+Gameplay documentation:
+
+The character will move left or right as long as the appropriate key is
+depressed.  Jump does not operate the same; the character reaches a maximum
+height and remains there until either the jump key is released or the
+maximum jump length (dependent on weight) is reached.  Jump height is also
+a function of weight.
+
+Pressing the P key pauses the game; the character does not move and the
+food on the conveyor belt does not advance.  Changes in key presses are still
+registered, however, and go into effect once the game is unpaused.
+
+1 switches the game into easy mode, and 2 into hard mode.  In hard mode,
+the conveyor belt moves faster, food appears on the belt more often, and
+there is a smaller probability of any given food instance being a doughnut
+as well as a higher probability of any given food being healthier (ie,
+causing a larger weight loss).
+
+A doughnut causes a weight gain of 5, while cheese, carrots, and celery
+cause weight losses of 3, 7, and 10 respectively.  The player starts at
+150 pounds, and the game is over if the player's weight falls to
+100 pounds or below.
+
+The character will visibly grow and shrink in terms of width as the weight
+increases or decreases.  As weight increases, both the jump height and jump
+length (the amount of time the player can remain suspended in the air on one
+jump) decrease.  This is beneficial to characters who are low on weight; they
+can fit between two foods without colliding with either easier, and can stay in
+the air longer to get over a chain of healthy foods.

@@ -1,0 +1,7 @@
+# Other revision control
+.svn
+
+# Compilation files
+*doughnut_adventure
+*.d
+*.o
