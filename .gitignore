@@ -1,7 +1,13 @@
 # Other revision control
 .svn
 
+# IDE project information
+nbproject
+
 # Compilation files
 *doughnut_adventure
 *.d
 *.o
+
+# Backup files
+*~

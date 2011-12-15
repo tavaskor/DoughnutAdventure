@@ -19,12 +19,8 @@ GAMEPARTS=Object.o Player.o Food.o FoodGenerator.o \
 	  EasyFoodGenerator.o HardFoodGenerator.o
 AFTEROBJS=onexit.o
 
-# Need to execute program with typing "make"!
-.phony: run
-run: ${A1EXE} ${AFTEREXE}
-	@echo "make: Running program"
-	@-./${A1EXE}
-	@./${AFTEREXE}
+.phony: ALL
+ALL: ${A1EXE} ${AFTEREXE}
 
 ${A1EXE}: ${A1MAINOBJS}
 	${CXX} -o ${A1EXE} ${A1MAINOBJS} ${LDFLAGS}
