@@ -3,70 +3,70 @@
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
 #include <sys/timeb.h>
-
-#include "XData.h"
-#include "StartHandler.h"
-#include "StartDrawer.h"
-#include "StartModel.h"
-#include "GameHandler.h"
-#include "GameDrawer.h"
-#include "GameModel.h"
-#include "Player.h"
-#include "Food.h"
-#include "GameOverDrawer.h"
-
 #include <list>
 
-void startScreenLoop(XData &xdata);
-void gameLoop(XData &xdata);
-void gameOverLoop(XData &xdata);
+#include "XData.h"
 
-void checkEvents(XData &xdata, GameHandler &handler); 
+#include "SplashHandler.h"
+#include "SplashModel.h"
+#include "SplashDrawer.h"
+#include "StartDrawer.h"
+#include "GameOverDrawer.h"
+
+#include "GameHandler.h"
+#include "GameModel.h"
+#include "GameDrawer.h"
+
+// TODO: These should be part of the model; 
+// the view can query the model to acquire this information.
+#include "Player.h"
+#include "Food.h"
+
+
+
+const static unsigned int MILLI_RESOLUTION = 5;
+
+void gameLoop(XData &xdata);
+void splashScreenLoop(XData &xdata, bool gameStart);
+
 
 int main() {
    XData xdata;
 
-   startScreenLoop(xdata);
+   splashScreenLoop(xdata, true);
    while (true) {
       gameLoop(xdata);
-      gameOverLoop(xdata);
+      splashScreenLoop(xdata, false);
    }
 }
 
-
-void startScreenLoop(XData &xdata) {
-   StartModel model;
-   StartDrawer draw(xdata, model);
-   StartHandler handler(xdata, draw, model);
+void splashScreenLoop(XData &xdata, bool gameStart) {
+   SplashModel model;
+   SplashDrawer *drawer;
+   if (gameStart) {
+       drawer = new StartDrawer(xdata, model);
+   } else {
+       drawer = new GameOverDrawer(xdata, model);
+   }
+   SplashHandler handler(xdata, *drawer, model);
+   
    while (!model.buttonIsActivated()) {
       handler.handleEvent();
    }
+   delete drawer;
 }
 
-void gameOverLoop(XData &xdata) {
-   StartModel model;
-   GameOverDrawer draw(xdata, model);
-   StartHandler handler(xdata, draw, model);
-   while (!model.buttonIsActivated()) {
-      handler.handleEvent();
-   }
-}
 
-void gameLoop(XData &xdata) {
-   const static unsigned int MILLI_RESOLUTION = 5;
-   std::list<Food> fl;
-   Player homer;
-   GameModel model(homer, fl);
-   GameDrawer draw(xdata, model, homer, fl);
-   GameHandler handler(xdata, draw, model);
+void loopUntilGameOver(GameModel &model, GameHandler &handler) {
    while (!model.gameOver()) {
       timeb initial, after;
       ftime(&initial);
-      checkEvents(xdata, handler);
+      
+      handler.handleEvent();
       if (!model.gamePaused()) {
          model.advanceTime();
-         // Repaint if necessary
       }
+      
       ftime(&after);
 
       unsigned int milli_adjust = (1000 * (after.time - initial.time)) +
@@ -77,8 +77,11 @@ void gameLoop(XData &xdata) {
    }
 }
 
-void checkEvents(XData &xdata, GameHandler &handler) {
-   if ( XPending(xdata.display) ) {
-      handler.handleEvent();
-   }
+void gameLoop(XData &xdata) {
+   std::list<Food> fl;
+   Player homer;
+   GameModel model(homer, fl);
+   GameDrawer draw(xdata, model, homer, fl);
+   GameHandler handler(xdata, draw, model);
+   loopUntilGameOver(model, handler);
 }

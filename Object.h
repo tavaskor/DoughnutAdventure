@@ -16,19 +16,19 @@ class Object {
       int getWidth() const;
       int getHeight() const;
 
-      bool collidesWith(Object &other);
+      bool collidesWith(const Object &other) const;
 
       void increaseX(int amount); // negative to decrease X
       void increaseY(int amount); // negative to decrease Y
       void increaseWidth(int amount);
 
    private:
-      bool horizontalCollission(Object &other);
-      bool verticalCollission(Object &other);
-      bool leftCollission(Object &other);
-      bool rightCollission(Object &other);
-      bool topCollission(Object &other);
-      bool bottomCollission(Object &other);
+      bool horizontalCollission(const Object &other) const;
+      bool verticalCollission(const Object &other) const;
+      bool leftCollission(const Object &other) const;
+      bool rightCollission(const Object &other) const;
+      bool topCollission(const Object &other) const;
+      bool bottomCollission(const Object &other) const;
 
       int x;
       int y;

@@ -1,16 +1,16 @@
-#include "StartHandler.h"
+#include "SplashHandler.h"
 
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
 
-StartHandler::StartHandler(XData &xdata, GraphicsDrawer &graphdraw,
-      StartModel &sm) : EventHandler(xdata, graphdraw), model(sm) {
+SplashHandler::SplashHandler(XData &xdata, GraphicsDrawer &graphdraw,
+      SplashModel &sm) : EventHandler(xdata, graphdraw), model(sm) {
    this->selectInput( ButtonPressMask | ButtonReleaseMask | 
 	 ButtonMotionMask );
    XAutoRepeatOn(xdata.display);
 }
 
-void StartHandler::handleOtherEvents(XEvent &event) {
+void SplashHandler::handleOtherEvents(XEvent &event) {
    // We need to check if "start" is pressed
    switch(event.type) {
       case ButtonPress:
@@ -42,7 +42,7 @@ void StartHandler::handleOtherEvents(XEvent &event) {
    }
 }
 
-bool StartHandler::mouseInButtonBounds(XEvent &event) {
+bool SplashHandler::mouseInButtonBounds(XEvent &event) {
    int mousex = event.xbutton.x;
    int mousey = event.xbutton.y;
    return mousex >= model.getButtonX() && mousey >= model.getButtonY() &&

@@ -9,11 +9,13 @@ void EventHandler::selectInput(long event_mask) {
 }
 
 void EventHandler::handleEvent() {
-   XEvent *xe = getNextEvent();
-   if (!checkAndHandleExpose(*xe) && !checkAndHandleQuit(*xe)) {
-      handleOtherEvents(*xe);
+   if ( XPending(xdat.display) ) {
+       XEvent *xe = getNextEvent();
+       if (!checkAndHandleExpose(*xe) && !checkAndHandleQuit(*xe)) {
+          handleOtherEvents(*xe);
+       }
+       delete xe;
    }
-   delete xe;
 }
 
 XEvent* EventHandler::getNextEvent() {

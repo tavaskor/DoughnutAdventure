@@ -1,13 +1,13 @@
 // StartModel.h
 
-#ifndef __START_MODEL_H__
-#define __START_MODEL_H__
+#ifndef __SPLASH_MODEL_H__
+#define __SPLASH_MODEL_H__
 
 #include "ModelBase.h"
 
-class StartModel : public ModelBase {
+class SplashModel : public ModelBase {
    public:
-      StartModel();
+      SplashModel();
       bool isButtonPressed();
       void setButtonPressed();
       void setButtonUnpressed();
@@ -24,4 +24,4 @@ class StartModel : public ModelBase {
       bool buttonActivated;
 };
 
-#endif // __START_MODEL_H__
+#endif // __SPLASH_MODEL_H__

@@ -12,30 +12,30 @@ void Object::increaseY(int amount) { y += amount; }
 void Object::increaseWidth(int amount) { w += amount; }
 
 
-bool Object::collidesWith(Object &other) {
+bool Object::collidesWith(const Object &other) const {
    return ( horizontalCollission(other) && verticalCollission(other) );
 }
 
-bool Object::horizontalCollission(Object &other) {
+bool Object::horizontalCollission(const Object &other) const {
    return ( leftCollission(other) || rightCollission(other) );
 }
 
-bool Object::verticalCollission(Object &other) {
+bool Object::verticalCollission(const Object &other) const {
    return ( topCollission(other) || bottomCollission(other) );
 }
 
-bool Object::leftCollission(Object &other) {
+bool Object::leftCollission(const Object &other) const {
    return ( (x >= other.x) && (x <= other.x + other.w) );
 }
 
-bool Object::rightCollission(Object &other) {
+bool Object::rightCollission(const Object &other) const {
    return ( (x + w >= other.x) && (x + w <= other.x + other.w) );
 }
 
-bool Object::topCollission(Object &other) {
+bool Object::topCollission(const Object &other) const {
    return ( (y >= other.y) && (y <= other.y + other.h) );
 }
 
-bool Object::bottomCollission(Object &other) {
+bool Object::bottomCollission(const Object &other) const {
    return ( (y + h >= other.y) && (y + h <= other.y + other.h) );
 }

@@ -1,7 +1,7 @@
 #include "GameOverDrawer.h"
 
 GameOverDrawer::GameOverDrawer(XData &xdata,
-            StartModel &sm) : SplashDrawer(xdata, sm) {
+            SplashModel &sm) : SplashDrawer(xdata, sm) {
       this->redraw();
 }
 

@@ -4,11 +4,11 @@
 #define __GAME_OVER_DRAWER_H__
 
 #include "SplashDrawer.h"
-#include "StartModel.h"
+#include "SplashModel.h"
 
 class GameOverDrawer : public SplashDrawer {
    public:
-      GameOverDrawer(XData &xdata, StartModel &sm);
+      GameOverDrawer(XData &xdata, SplashModel &sm);
 
    protected:
       virtual const char* getHeader();

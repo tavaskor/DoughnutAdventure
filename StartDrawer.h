@@ -3,11 +3,11 @@
 #define __START_DRAWER_H__
 
 #include "SplashDrawer.h"
-#include "StartModel.h"
+#include "SplashModel.h"
 
 class StartDrawer : public SplashDrawer {
    public:
-      StartDrawer(XData &xdata, StartModel &sm);
+      StartDrawer(XData &xdata, SplashModel &sm);
 
    protected:
       virtual const char* getHeader();

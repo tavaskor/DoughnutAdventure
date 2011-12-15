@@ -11,10 +11,10 @@ ALL_SRC=${ALL_OBJS:.o=.cc}
 ALL_DEPS=${ALL_OBJS:.o=.d}
 
 A1MAINOBJS=main.o XData.o ${EVENTOBJS} ${DRAWOBJS} ${MODELOBJS}
-EVENTOBJS=EventHandler.o StartHandler.o GameHandler.o
+EVENTOBJS=EventHandler.o SplashHandler.o GameHandler.o
 DRAWOBJS=GraphicsDrawer.o SplashDrawer.o GameDrawer.o \
 	 StartDrawer.o GameOverDrawer.o
-MODELOBJS=ModelBase.o StartModel.o GameModel.o ${GAMEPARTS} 
+MODELOBJS=ModelBase.o SplashModel.o GameModel.o ${GAMEPARTS} 
 GAMEPARTS=Object.o Player.o Food.o FoodGenerator.o \
 	  EasyFoodGenerator.o HardFoodGenerator.o
 AFTEROBJS=onexit.o

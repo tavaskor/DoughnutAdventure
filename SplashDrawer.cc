@@ -5,7 +5,7 @@
 using std::string;
 
 SplashDrawer::SplashDrawer(XData &xdata, 
-      StartModel &sm) : GraphicsDrawer(xdata), model(sm) {
+      SplashModel &sm) : GraphicsDrawer(xdata), model(sm) {
    model.addView(*this);
 }
 

@@ -3,11 +3,11 @@
 #define __SPLASH_DRAWER_H__
 
 #include "GraphicsDrawer.h"
-#include "StartModel.h"
+#include "SplashModel.h"
 
 class SplashDrawer : public GraphicsDrawer {
    public:
-      SplashDrawer(XData &xdata, StartModel &sm);
+      SplashDrawer(XData &xdata, SplashModel &sm);
       virtual void redraw();
 
    protected:
@@ -15,7 +15,7 @@ class SplashDrawer : public GraphicsDrawer {
       virtual const char* getInstruction() = 0;
 
    private:
-      StartModel &model;
+      SplashModel &model;
 
       void drawHeadingInformation();
       void drawImmediateInstructions();

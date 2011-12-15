@@ -95,29 +95,21 @@ void GameModel::decrementIfNonZero(int &counter) {
 }
 
 void GameModel::checkKeyMoves() {
-   bool updateViews = false;
-
    if ( checkMove('i', upMoveCounter) ) {
       // move up?
    } 
    if ( checkMove('j', leftMoveCounter) ) {
       if ( player.getLeftX() > 0 ) {
 	 player.increaseX(-BASE_CHANGE_AMT);
-	 updateViews=true;
       }
    } 
    if ( checkMove('k', rightMoveCounter) ) {
       if ( player.getLeftX() + player.getWidth() < WINDOW_WIDTH ) {
 	 player.increaseX(BASE_CHANGE_AMT);
-	 updateViews=true;
       }
    } 
    if ( checkMove('m', downMoveCounter) ) {
       // move down?
-   }
-
-   if (updateViews) {
-      updateAllViews();
    }
 }
 
