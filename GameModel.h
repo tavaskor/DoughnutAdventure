@@ -15,7 +15,7 @@ enum GameDifficulty { EASY, HARD };
 
 class GameModel : public ModelBase {
    public:
-      GameModel(Player &pl, std::list<Food> &fdlist);
+      GameModel();
       virtual ~GameModel();
 
       // Advance time by one unit.  Once a certain number of units of
@@ -23,10 +23,7 @@ class GameModel : public ModelBase {
       void advanceTime();
 
       // Returns true if the game is over, false otherwise
-      bool gameOver();
-
-      // Switch difficulty between easy and hard
-      void toggleDifficulty();
+      bool gameOver() const;
 
       // Explicitly set the difficulty level
       void setDifficulty(GameDifficulty gd);
@@ -47,6 +44,10 @@ class GameModel : public ModelBase {
       // Set game paused or unpaused
       void togglePaused();
       bool gamePaused();
+      
+      // Access state for the purposes of the view
+      const Player& getPlayer() const;
+      const std::list<Food>& getFoodList() const;
 
       static const int GAMEOVER_WEIGHT = 100;
       static const int CONVEYOR_EASY = 10;
@@ -85,9 +86,9 @@ class GameModel : public ModelBase {
       int rightMoveCounter;
       int jumpLengthCounter;
 
-      Player &player;
+      Player player;
       GameDifficulty currDiff;
-      std::list<Food> &foodList;
+      std::list<Food> foodList;
       bool paused;
       bool currentlyJumping;
       bool jumpHasBeenReleased;

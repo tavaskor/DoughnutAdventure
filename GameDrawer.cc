@@ -9,8 +9,9 @@
 using std::stringstream;
 using std::string;
 
-GameDrawer::GameDrawer(XData &xdata, GameModel &gm, Player &pl,
-      std::list<Food> &fdList) : GraphicsDrawer(xdata), model(gm), player(pl), foodList(fdList) {
+GameDrawer::GameDrawer(XData &xdata, GameModel &gm) : 
+        GraphicsDrawer(xdata), model(gm), 
+        player(gm.getPlayer()), foodList(gm.getFoodList()) {
    this->redraw();
    model.addView(*this);
 }
@@ -46,7 +47,7 @@ void GameDrawer::drawPlayer() {
 }
 
 void GameDrawer::drawFood() {
-   for (std::list<Food>::iterator iter = foodList.begin();
+   for (std::list<Food>::const_iterator iter = foodList.begin();
 	 iter != foodList.end(); iter++) {
       switch ( iter->getFoodType() ) {
 	 case DOUGHNUT:

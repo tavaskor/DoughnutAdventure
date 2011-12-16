@@ -17,12 +17,6 @@
 #include "GameModel.h"
 #include "GameDrawer.h"
 
-// TODO: These should be part of the model; 
-// the view can query the model to acquire this information.
-#include "Player.h"
-#include "Food.h"
-
-
 
 const static unsigned int MILLI_RESOLUTION = 5;
 
@@ -78,10 +72,8 @@ void loopUntilGameOver(GameModel &model, GameHandler &handler) {
 }
 
 void gameLoop(XData &xdata) {
-   std::list<Food> fl;
-   Player homer;
-   GameModel model(homer, fl);
-   GameDrawer draw(xdata, model, homer, fl);
+   GameModel model;
+   GameDrawer draw(xdata, model);
    GameHandler handler(xdata, draw, model);
    loopUntilGameOver(model, handler);
 }

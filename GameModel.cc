@@ -9,12 +9,10 @@
 using std::list;
 using std::string;
 
-
 const static int BASE_CHANGE_AMT = 4;
 
-GameModel::GameModel(Player &pl, 
-      list<Food> &fdList) : player(pl), currDiff(EASY), foodList(fdList), paused(false), currentlyJumping(false), jumpHasBeenReleased(true) {
-
+GameModel::GameModel() : 
+        currDiff(EASY), paused(false), currentlyJumping(false), jumpHasBeenReleased(true) {
    conveyorMoveCounter = CONVEYOR_EASY;
    upMoveCounter = 0;
    downMoveCounter = 0;
@@ -30,27 +28,21 @@ GameModel::~GameModel() {
    delete foodgen;
 }
 
-bool GameModel::gameOver() {
+bool GameModel::gameOver() const {
    return (player.getWeight() <= GAMEOVER_WEIGHT);
 }
 
-void GameModel::toggleDifficulty() {
-   delete foodgen;
-   currDiff = (currDiff == HARD) ? EASY : GameDifficulty(currDiff+1);
-   if (currDiff == HARD) {
-      foodgen = new HardFoodGenerator();
-   } else {
-      foodgen = new EasyFoodGenerator();
-   }
-}
 
 void GameModel::setDifficulty(GameDifficulty gd) {
    currDiff = gd;
+   
+   delete foodgen;
    if (currDiff == HARD) {
       foodgen = new HardFoodGenerator();
    } else {
       foodgen = new EasyFoodGenerator();
    }
+   
    updateAllViews();
 }
 
@@ -181,6 +173,15 @@ void GameModel::togglePaused() {
 bool GameModel::gamePaused() {
    return paused;
 }
+
+const Player& GameModel::getPlayer() const {
+    return player;
+}
+
+const std::list<Food>& GameModel::getFoodList() const {
+    return foodList;
+}
+
 
 
 void GameModel::checkJumps() {

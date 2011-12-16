@@ -10,6 +10,6 @@ void Player::addWeight(int amount) {
 	 (oldWeight / WEIGHT_CHANGE_AMOUNT) );
 }
 
-int Player::getWeight() {
+int Player::getWeight() const {
    return weight;
 }

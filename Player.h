@@ -10,7 +10,7 @@ class Player : public Object {
       Player();
 
       void addWeight(int amount);
-      int getWeight();
+      int getWeight() const;
 
       static const int START_WEIGHT = 150;
       static const int DEF_X = 0;

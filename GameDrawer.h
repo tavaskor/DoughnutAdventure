@@ -12,7 +12,7 @@
 
 class GameDrawer : public GraphicsDrawer {
    public:
-      GameDrawer(XData &xdata, GameModel &gm, Player &pl, std::list<Food> &fdList);
+      GameDrawer(XData &xdata, GameModel &gm);
       virtual void redraw();
 
    private:
@@ -34,8 +34,8 @@ class GameDrawer : public GraphicsDrawer {
       void drawLine(int x1, int y1, int x2, int y2);
 
       GameModel &model;
-      Player &player;
-      std::list<Food> &foodList;
+      const Player &player;
+      const std::list<Food> &foodList;
 };
 
 #endif // __GAME_DRAWER_H__
