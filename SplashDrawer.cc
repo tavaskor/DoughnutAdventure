@@ -4,8 +4,8 @@
 #include <string>
 using std::string;
 
-SplashDrawer::SplashDrawer(XData &xdata, 
-      SplashModel &sm) : GraphicsDrawer(xdata), model(sm) {
+SplashDrawer::SplashDrawer(XData &xdata, SplashModel &sm) :
+        GraphicsDrawer(xdata), model(sm) {
    model.addView(*this);
 }
 
@@ -20,36 +20,22 @@ void SplashDrawer::redraw() {
 }
 
 void SplashDrawer::drawHeadingInformation() {
-   const char *font_name = "-*-helvetica-*-o-*-*-34-*-*-*-*-*-*-*";
-   XFontStruct *font_info = XLoadQueryFont(xdat.display, font_name);
-   XSetFont(xdat.display, xdat.gc, font_info->fid);
+   xdat.setFont("-*-helvetica-*-o-*-*-34-*-*-*-*-*-*-*");
 
    const char *title = this->getHeader();
-   int string_width = XTextWidth(font_info, title, strlen(title));
-   int xloc = (WINDOW_WIDTH - string_width) / 2;
-   int yloc = 50;
-   XDrawString(xdat.display, xdat.window, xdat.gc, xloc, yloc,
-	 title, strlen(title));
+   xdat.drawString(title, 50, CENTRE);
 }
 
 void SplashDrawer::drawImmediateInstructions() {
-   const char *font_name = "-*-helvetica-*-r-*-*-17-*-*-*-*-*-*-*";
-   XFontStruct *font_info = XLoadQueryFont(xdat.display, font_name);
-   XSetFont(xdat.display, xdat.gc, font_info->fid);
+   xdat.setFont("-*-helvetica-*-r-*-*-17-*-*-*-*-*-*-*");
 
    const char *title = this->getInstruction();
-   int string_width = XTextWidth(font_info, title, strlen(title));
-   int xloc = (WINDOW_WIDTH - string_width) / 2;
-   int yloc = 90;
-   XDrawString(xdat.display, xdat.window, xdat.gc, xloc, yloc,
-	 title, strlen(title));
+   xdat.drawString(title, 90, CENTRE);
 }
 
 
 void SplashDrawer::drawGameText() {
-   const char *font_name = "-*-helvetica-*-r-*-*-12-*-*-*-*-*-*-*";
-   XFontStruct *font_info = XLoadQueryFont(xdat.display, font_name);
-   XSetFont(xdat.display, xdat.gc, font_info->fid);
+    xdat.setFont("-*-helvetica-*-r-*-*-12-*-*-*-*-*-*-*");
 
    const int NUM_STRINGS = 6;
    string *lines = new string[NUM_STRINGS];
@@ -62,13 +48,7 @@ void SplashDrawer::drawGameText() {
 
    for (int i = 0; i < NUM_STRINGS; i++) {
       const char* label = lines[i].c_str();
-
-      int string_width = XTextWidth(font_info, label, strlen(label));
-      int xloc = (WINDOW_WIDTH - string_width) / 2;
-      int yloc = 130 + 20 * i;
-
-      XDrawString(xdat.display, xdat.window, xdat.gc, xloc, yloc,
-	    label, strlen(label));
+      xdat.drawString(label, 130 + (20 * i), CENTRE);
    }
 }
 
@@ -88,17 +68,15 @@ void SplashDrawer::drawStartButton() {
    }
 }
 
+// Write the word "Start"
 void SplashDrawer::drawStartButtonText() {
-   // Write the word "Start"
-   const char *font_name = "-*-helvetica-*-*-*-*-25-*-*-*-*-*-*-*";
+   xdat.setFont("-*-helvetica-*-*-*-*-25-*-*-*-*-*-*-*");
    const char *label = "Start";
-   XFontStruct *font_info = XLoadQueryFont(xdat.display, font_name);
-   XSetFont(xdat.display, xdat.gc, font_info->fid);
-
-   int string_height = font_info->ascent + font_info->descent;
-   int string_width = XTextWidth(font_info, label, strlen(label));
+   
+   int string_height = xdat.currentFontHeight();
+   int string_width = xdat.renderedWidthOfString(label);
    int xloc = model.getButtonX() + (model.getButtonWidth() - string_width) / 2;
    int yloc = model.getButtonY() + string_height + 7;
-   XDrawString(xdat.display, xdat.window, xdat.gc, xloc, yloc,
-	 label, strlen(label));
+   
+   xdat.drawString(label, xloc, yloc);
 }

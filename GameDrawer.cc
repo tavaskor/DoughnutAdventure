@@ -123,9 +123,8 @@ void GameDrawer::drawConveyorBelt() {
 
 
 void GameDrawer::drawStatusBar() {
-   const char *font_name = "-*-helvetica-*-*-*-*-10-*-*-*-*-*-*-*";
-   XFontStruct *font_info = XLoadQueryFont(xdat.display, font_name);
-   XSetFont(xdat.display, xdat.gc, font_info->fid);
+   const int STATUS_BAR_Y = WINDOW_HEIGHT - 8;
+   xdat.setFont("-*-helvetica-*-*-*-*-10-*-*-*-*-*-*-*");
 
    // Display the weight in the bottom left
    stringstream ss;
@@ -135,8 +134,7 @@ void GameDrawer::drawStatusBar() {
 
    string text = "Weight: " + weight;
    const char *toDisplay = text.c_str();
-   XDrawString(xdat.display, xdat.window, xdat.gc, 2, WINDOW_HEIGHT-8,
-	 toDisplay, strlen(toDisplay));
+   xdat.drawString(toDisplay, STATUS_BAR_Y, LEFT);
 
    // Display the difficulty in the bottom right
    string diffic;
@@ -152,25 +150,18 @@ void GameDrawer::drawStatusBar() {
 	 diffic = "Unknown";
 	 break;
    }
+   
    text = "Difficulty: " + diffic;
    toDisplay = text.c_str();
-   int string_width = XTextWidth(font_info, toDisplay, strlen(toDisplay));
-   XDrawString(xdat.display, xdat.window, xdat.gc, 
-	 WINDOW_WIDTH - string_width - 2, WINDOW_HEIGHT-8,
-	 toDisplay, strlen(toDisplay));
+   xdat.renderedWidthOfString(toDisplay);
+   xdat.drawString(toDisplay, STATUS_BAR_Y, RIGHT);
 }
 
 void GameDrawer::drawPaused() {
-   const char* font_name = "-*-helvetica-*-r-*-*-34-*-*-*-*-*-*-*";
-   XFontStruct *font_info = XLoadQueryFont(xdat.display, font_name);
-   XSetFont(xdat.display, xdat.gc, font_info->fid);
+   xdat.setFont("-*-helvetica-*-r-*-*-34-*-*-*-*-*-*-*");
 
-   string text = "PAUSED";
-   const char *toDisplay = text.c_str();
-   int stringWidth = XTextWidth(font_info, toDisplay, strlen(toDisplay));
-   XDrawString(xdat.display, xdat.window, xdat.gc,
-	 (WINDOW_WIDTH - stringWidth)/2, WINDOW_HEIGHT/2,
-	 toDisplay, strlen(toDisplay));
+   const char *toDisplay = "PAUSED";
+   xdat.drawString(toDisplay, WINDOW_HEIGHT / 2, CENTRE);
 }
 
 void GameDrawer::drawRectangle(int x, int y, int width, int height) {
