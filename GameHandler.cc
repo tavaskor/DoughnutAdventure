@@ -7,7 +7,6 @@ using std::endl;
 GameHandler::GameHandler(XData &xdata, GraphicsDrawer &graphdraw, 
       GameModel &gm) : EventHandler(xdata, graphdraw), model(gm) {
    this->selectInput( KeyPressMask | KeyReleaseMask );
-   XAutoRepeatOff(xdata.display);
 }
 
 void GameHandler::handleOtherEvents(XEvent &event) {

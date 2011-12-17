@@ -4,24 +4,17 @@
 #include <iostream>  // For exit call; seems unnecessarily bulky
 
 void EventHandler::selectInput(long event_mask) {
-   XSelectInput( xdat.display, xdat.window, 
-	 ExposureMask | KeyPressMask | event_mask);
+    xdat.selectInput(ExposureMask | KeyPressMask | event_mask);
 }
 
 void EventHandler::handleEvent() {
-   if ( XPending(xdat.display) ) {
-       XEvent *xe = getNextEvent();
+   if ( xdat.pending() ) {
+       XEvent *xe = xdat.getNextEvent();
        if (!checkAndHandleExpose(*xe) && !checkAndHandleQuit(*xe)) {
           handleOtherEvents(*xe);
        }
        delete xe;
    }
-}
-
-XEvent* EventHandler::getNextEvent() {
-   XEvent *event = new XEvent();
-   XNextEvent(xdat.display, event);
-   return event;
 }
 
 bool EventHandler::checkAndHandleExpose(XEvent &theEvent) {
@@ -42,8 +35,7 @@ bool EventHandler::checkAndHandleQuit(XEvent &theEvent) {
 	    &key, 0);
       if ( i == 1 && ( text[0] == 'q' || text[0] == 'Q' ) ) {
 	 // Exit the program!
-	 XAutoRepeatOn(xdat.display);
-	 XCloseDisplay(xdat.display);
+         xdat.finalCleanup();
 	 exit(0);
       }
    }

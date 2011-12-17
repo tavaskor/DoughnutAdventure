@@ -7,7 +7,7 @@ SplashHandler::SplashHandler(XData &xdata, GraphicsDrawer &graphdraw,
       SplashModel &sm) : EventHandler(xdata, graphdraw), model(sm) {
    this->selectInput( ButtonPressMask | ButtonReleaseMask | 
 	 ButtonMotionMask );
-   XAutoRepeatOn(xdata.display);
+//   XAutoRepeatOn(xdata.display); // Was there a reason for this?
 }
 
 void SplashHandler::handleOtherEvents(XEvent &event) {

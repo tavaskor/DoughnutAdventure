@@ -11,12 +11,12 @@ SplashDrawer::SplashDrawer(XData &xdata, SplashModel &sm) :
 
 
 void SplashDrawer::redraw() {
-   XClearWindow( xdat.display, xdat.window );
-   drawHeadingInformation();
-   drawImmediateInstructions();
-   drawGameText();
-   drawStartButton();
-   XFlush(xdat.display);
+    xdat.clearWindow();
+    drawHeadingInformation();
+    drawImmediateInstructions();
+    drawGameText();
+    drawStartButton();
+    xdat.flushDisplay();
 }
 
 void SplashDrawer::drawHeadingInformation() {
@@ -35,7 +35,7 @@ void SplashDrawer::drawImmediateInstructions() {
 
 
 void SplashDrawer::drawGameText() {
-    xdat.setFont("-*-helvetica-*-r-*-*-12-*-*-*-*-*-*-*");
+   xdat.setFont("-*-helvetica-*-r-*-*-12-*-*-*-*-*-*-*");
 
    const int NUM_STRINGS = 6;
    string *lines = new string[NUM_STRINGS];

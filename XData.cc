@@ -7,6 +7,7 @@ using std::cerr;
 using std::endl;
 
 #include "WindowConstants.h"
+#include "EasyFoodGenerator.h"
 
 
 XData::XData(int argc, char **argv, int border_width) {
@@ -51,6 +52,9 @@ XData::XData(int argc, char **argv, int border_width) {
 
    XMapRaised(this->display, this->window);
    XFlush(this->display);  // Doesn't display without this
+   
+   // Prepare for starting the game.
+   XAutoRepeatOff(this->display);
 }
 
 // Tell the window manager which inputs are needed
@@ -112,4 +116,27 @@ void XData::drawArc(int x, int y, unsigned int width, unsigned int height,
 
 void XData::drawLine(int x1, int y1, int x2, int y2) {
     XDrawLine(this->display, this->window, this->gc, x1, y1, x2, y2);
+}
+
+void XData::clearWindow() {
+   XClearWindow(this->display, this->window);
+}
+
+void XData::flushDisplay() {
+   XFlush(this->display);
+}
+
+bool XData::pending() {
+    return XPending(this->display);
+}
+
+XEvent* XData::getNextEvent() {
+   XEvent *event = new XEvent();
+   XNextEvent(this->display, event);
+   return event;
+}
+
+void XData::finalCleanup() {
+    XAutoRepeatOn(this->display);
+    XCloseDisplay(this->display);
 }

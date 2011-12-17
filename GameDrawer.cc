@@ -17,7 +17,7 @@ GameDrawer::GameDrawer(XData &xdata, GameModel &gm) :
 }
 
 void GameDrawer::redraw() {
-   XClearWindow( xdat.display, xdat.window );
+   xdat.clearWindow();
    drawPlayer();
    drawFood();
    drawConveyorBelt();
@@ -25,7 +25,7 @@ void GameDrawer::redraw() {
    if (model.gamePaused()) {
       drawPaused();
    }
-   XFlush(xdat.display);
+   xdat.flushDisplay();
 }
 
 void GameDrawer::drawPlayer() {
@@ -124,8 +124,7 @@ void GameDrawer::drawConveyorBelt() {
 
 void GameDrawer::drawStatusBar() {
    const int STATUS_BAR_Y = WINDOW_HEIGHT - 8;
-   xdat.setFont("-*-helvetica-*-*-*-*-10-*-*-*-*-*-*-*");
-
+   
    // Display the weight in the bottom left
    stringstream ss;
    ss << player.getWeight();
@@ -134,6 +133,8 @@ void GameDrawer::drawStatusBar() {
 
    string text = "Weight: " + weight;
    const char *toDisplay = text.c_str();
+   
+   xdat.setFont("-*-helvetica-*-*-*-*-10-*-*-*-*-*-*-*");
    xdat.drawString(toDisplay, STATUS_BAR_Y, LEFT);
 
    // Display the difficulty in the bottom right
