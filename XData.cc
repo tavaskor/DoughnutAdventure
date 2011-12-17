@@ -96,3 +96,20 @@ void XData::drawString(const char* str, int xDisplacement, int yDisplacement) {
             xDisplacement, yDisplacement,
             str, strlen(str));
 }
+
+void XData::drawRectangle(int x, int y, unsigned int width, unsigned int height, bool fill) {
+    int (*toCall)(Display*, Drawable, GC, int, int, unsigned int, unsigned int);
+    toCall = fill ? &XFillRectangle : &XDrawRectangle;
+    (*toCall)(this->display, this->window, this->gc, x, y, width, height);
+}
+
+void XData::drawArc(int x, int y, unsigned int width, unsigned int height,
+                int angle1, int angle2, bool fill) {
+    int (*toCall)(Display*, Drawable, GC, int, int, unsigned int, unsigned int, int, int);
+    toCall = fill ? &XFillArc : &XDrawArc;
+    (*toCall)(this->display, this->window, this->gc, x, y, width, height, angle1, angle2);
+}
+
+void XData::drawLine(int x1, int y1, int x2, int y2) {
+    XDrawLine(this->display, this->window, this->gc, x1, y1, x2, y2);
+}

@@ -23,11 +23,16 @@ class XData {
       void drawString(const char *str, int yDisplacement, TextAlignment align);
       void drawString(const char *str, int xDisplacement, int yDisplacement);
       
+      void drawRectangle(int x, int y, unsigned int width, unsigned int height, bool fill = false);
+      void drawArc(int x, int y, unsigned int width, unsigned int height,
+                int angle1, int angle2, bool fill = false);
+      void drawLine(int x1, int y1, int x2, int y2);
+      
       Display *display;
       Window window;
-      GC gc;
       
    private:
+       GC gc;
        const static int BORDER_WIDTH = 5;
        
        XFontStruct *currentFont;

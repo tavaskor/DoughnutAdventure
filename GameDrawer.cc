@@ -165,26 +165,23 @@ void GameDrawer::drawPaused() {
 }
 
 void GameDrawer::drawRectangle(int x, int y, int width, int height) {
-   XDrawRectangle( xdat.display, xdat.window, xdat.gc, 
-	 x, WINDOW_HEIGHT - y - height - 20, width, height );
+    xdat.drawRectangle(x, WINDOW_HEIGHT - y - height - 20, width, height, false);
 }
 
 void GameDrawer::fillRectangle(int x, int y, int width, int height) {
-   XFillRectangle( xdat.display, xdat.window, xdat.gc,
-	 x, WINDOW_HEIGHT - y - height - 20, width, height );
+    xdat.drawRectangle(x, WINDOW_HEIGHT - y - height - 20, width, height, true);
 }
 
 void GameDrawer::drawEllipse(int centreX, int centreY, int width, int height) {
-   XDrawArc(xdat.display, xdat.window, xdat.gc, centreX - (width/2),
-	 WINDOW_HEIGHT - centreY - (height/2) - 20, width, height, 0, 360*64);
+    xdat.drawArc(centreX - (width/2), WINDOW_HEIGHT - centreY - (height/2) - 20,
+            width, height, 0, 360*64, false);
 }
 
 void GameDrawer::fillEllipse(int centreX, int centreY, int width, int height) {
-   XFillArc(xdat.display, xdat.window, xdat.gc, centreX - (width/2),
-	 WINDOW_HEIGHT - centreY - (height/2) - 20, width, height, 0, 360*64);
+    xdat.drawArc(centreX - (width/2), WINDOW_HEIGHT - centreY - (height/2) - 20,
+            width, height, 0, 360*64, true);
 }
 
 void GameDrawer::drawLine(int x1, int y1, int x2, int y2) {
-   XDrawLine(xdat.display, xdat.window, xdat.gc, x1, WINDOW_HEIGHT - y1 - 20, 
-	 x2, WINDOW_HEIGHT - y2 - 20);
+    xdat.drawLine(x1, WINDOW_HEIGHT - y1 - 20, x2, WINDOW_HEIGHT - y2 - 20);
 }

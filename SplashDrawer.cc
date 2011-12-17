@@ -54,17 +54,10 @@ void SplashDrawer::drawGameText() {
 
 
 void SplashDrawer::drawStartButton() {
-   if ( model.isButtonPressed() ) {
-      XFillRectangle(xdat.display, xdat.window, xdat.gc,
-	    model.getButtonX(), model.getButtonY(),
-	    model.getButtonWidth(), model.getButtonHeight());
-   } else {
-      // Draw the button
-      XDrawRectangle(xdat.display, xdat.window, xdat.gc, 
-	    model.getButtonX(), model.getButtonY(),
-	    model.getButtonWidth(), model.getButtonHeight());
-
-      drawStartButtonText();
+   xdat.drawRectangle(model.getButtonX(), model.getButtonY(),
+        model.getButtonWidth(), model.getButtonHeight(), model.isButtonPressed());
+   if (!model.isButtonPressed()) {
+       drawStartButtonText();
    }
 }
 
