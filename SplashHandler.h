@@ -11,10 +11,10 @@ class SplashHandler : public EventHandler {
       SplashHandler(XData &xdata, GraphicsDrawer &gd, SplashModel &sm);
 
    protected:
-      virtual void handleOtherEvents(XEvent &event);
+      virtual void handleOtherEvents(int eventType);
 
    private:
-      bool mouseInButtonBounds(XEvent &event);
+      bool mouseInButtonBounds();
       SplashModel &model;
       bool buttonPressedInBounds;
 };

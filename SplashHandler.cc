@@ -1,20 +1,17 @@
 #include "SplashHandler.h"
 
-#include <X11/Xlib.h>
-#include <X11/Xutil.h>
+#include <X11/X.h>
 
 SplashHandler::SplashHandler(XData &xdata, GraphicsDrawer &graphdraw,
       SplashModel &sm) : EventHandler(xdata, graphdraw), model(sm) {
-   this->selectInput( ButtonPressMask | ButtonReleaseMask | 
-	 ButtonMotionMask );
-//   XAutoRepeatOn(xdata.display); // Was there a reason for this?
+//   XAutoRepeatOn(xdata.display); // Was there a reason for this here?
 }
 
-void SplashHandler::handleOtherEvents(XEvent &event) {
+void SplashHandler::handleOtherEvents(int eventType) {
    // We need to check if "start" is pressed
-   switch(event.type) {
+   switch(eventType) {
       case ButtonPress:
-	 if ( mouseInButtonBounds(event) ) {
+	 if ( mouseInButtonBounds() ) {
 	    model.setButtonPressed();
 	    buttonPressedInBounds = true;
 	 } else {
@@ -32,19 +29,19 @@ void SplashHandler::handleOtherEvents(XEvent &event) {
 	    // The button was pressed in bounds, but the pointer may have
 	    // been moved in and out of the start button.  If so, the model
 	    // needs to be updated accordingly.
-	    if ( model.isButtonPressed() && !mouseInButtonBounds(event) ) {
+	    if ( model.isButtonPressed() && !mouseInButtonBounds() ) {
 	       model.setButtonUnpressed();
-	    } else if ( !model.isButtonPressed() && mouseInButtonBounds(event) ) {
+	    } else if ( !model.isButtonPressed() && mouseInButtonBounds() ) {
 	       model.setButtonPressed();
 	    }
-	 }
-	 break;
+         }
+         break;
    }
 }
 
-bool SplashHandler::mouseInButtonBounds(XEvent &event) {
-   int mousex = event.xbutton.x;
-   int mousey = event.xbutton.y;
+bool SplashHandler::mouseInButtonBounds() {
+   int mousex = xdat.getMouseX();
+   int mousey = xdat.getMouseY();
    return mousex >= model.getButtonX() && mousey >= model.getButtonY() &&
       mousex <= model.getButtonX() + model.getButtonWidth() &&
       mousey <= model.getButtonY() + model.getButtonHeight();

@@ -3,32 +3,39 @@
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
 #include <iostream>
-using std::cerr;
-using std::endl;
 
 #include "WindowConstants.h"
 #include "EasyFoodGenerator.h"
 
+struct XDataImplementation {
+   Display *display;
+   Window window;
+   GC gc;
 
-XData::XData(int argc, char **argv, int border_width) {
+   XFontStruct *currentFont;
+   XEvent currentEvent;
+};
+
+XData::XData(int argc, char **argv, int border_width) : 
+        impl(new XDataImplementation()) {
    // Open the display first
-   this->display = XOpenDisplay("");
-   if ( !this->display ) {
-      cerr << "Unable to open the display." << endl;
+   impl->display = XOpenDisplay("");
+   if ( !impl->display ) {
+      std::cerr << "Unable to open the display." << std::endl;
       exit(0);
    }
 
    // Get the default screen
-   int screen = DefaultScreen(this->display);
+   int screen = DefaultScreen(impl->display);
 
    // Get the background and foreground colours
-   unsigned long background = BlackPixel(this->display, screen);
-   unsigned long foreground = WhitePixel(this->display, screen);
+   unsigned long background = BlackPixel(impl->display, screen);
+   unsigned long foreground = WhitePixel(impl->display, screen);
 
    // Set up size and location of window
    XSizeHints hints;
-   int displayWidth = DisplayWidth(this->display, screen);
-   int displayHeight = DisplayHeight(this->display, screen);
+   int displayWidth = DisplayWidth(impl->display, screen);
+   int displayHeight = DisplayHeight(impl->display, screen);
 
    hints.width = WINDOW_WIDTH;
    hints.height = WINDOW_HEIGHT;
@@ -37,42 +44,47 @@ XData::XData(int argc, char **argv, int border_width) {
    hints.flags = PPosition | PSize;
 
    // Create a simple window, and set the basic properties of it
-   this->window = XCreateSimpleWindow(this->display,
-	 DefaultRootWindow( this->display ), hints.x, hints.y,
+   impl->window = XCreateSimpleWindow(impl->display,
+	 DefaultRootWindow( impl->display ), hints.x, hints.y,
 	 hints.width, hints.height, border_width, foreground, background );
-   XSetStandardProperties( this->display, this->window, 
+   XSetStandardProperties( impl->display, impl->window, 
 	 "Doughnut Adventure", "Doughnut Adventure",
 	 None, NULL, 0, &hints );
 
    // Next, create a graphics context and set the colours that are going
    // to be used for drawing
-   this->gc = XCreateGC (this->display, this->window, 0, 0 );
-   XSetBackground(this->display, this->gc, background);
-   XSetForeground(this->display, this->gc, foreground);
+   impl->gc = XCreateGC (impl->display, impl->window, 0, 0 );
+   XSetBackground(impl->display, impl->gc, background);
+   XSetForeground(impl->display, impl->gc, foreground);
 
-   XMapRaised(this->display, this->window);
-   XFlush(this->display);  // Doesn't display without this
+   XMapRaised(impl->display, impl->window);
+   XFlush(impl->display);  // Doesn't display without this
+
+   // Excessive, but handle all events that may need handling, regardless
+   // of whether it will be relevant in the current context.
+   XSelectInput( impl->display, impl->window, 
+         ExposureMask | KeyPressMask | KeyReleaseMask | 
+         ButtonPressMask | ButtonReleaseMask | ButtonMotionMask );
    
    // Prepare for starting the game.
-   XAutoRepeatOff(this->display);
+   XAutoRepeatOff(impl->display);
 }
 
-// Tell the window manager which inputs are needed
-void XData::selectInput(long event_mask) {
-   XSelectInput( this->display, this->window, event_mask);
+XData::~XData() {
+   delete impl;
 }
 
 void XData::setFont(const char *font_name) {
-   currentFont = XLoadQueryFont(this->display, font_name);
-   XSetFont(this->display, this->gc, currentFont->fid);
+   impl->currentFont = XLoadQueryFont(impl->display, font_name);
+   XSetFont(impl->display, impl->gc, impl->currentFont->fid);
 }
 
 int XData::currentFontHeight() {
-    return currentFont->ascent + currentFont->descent;
+    return impl->currentFont->ascent + impl->currentFont->descent;
 }
 
 int XData::renderedWidthOfString(const char* str) {
-    return XTextWidth(currentFont, str, strlen(str));
+    return XTextWidth(impl->currentFont, str, strlen(str));
 }
 
 void XData::drawString(const char *str, int yDisplacement, TextAlignment align) {
@@ -96,7 +108,7 @@ void XData::drawString(const char *str, int yDisplacement, TextAlignment align) 
 }
 
 void XData::drawString(const char* str, int xDisplacement, int yDisplacement) {
-    XDrawString(this->display, this->window, this->gc, 
+    XDrawString(impl->display, impl->window, impl->gc, 
             xDisplacement, yDisplacement,
             str, strlen(str));
 }
@@ -104,39 +116,62 @@ void XData::drawString(const char* str, int xDisplacement, int yDisplacement) {
 void XData::drawRectangle(int x, int y, unsigned int width, unsigned int height, bool fill) {
     int (*toCall)(Display*, Drawable, GC, int, int, unsigned int, unsigned int);
     toCall = fill ? &XFillRectangle : &XDrawRectangle;
-    (*toCall)(this->display, this->window, this->gc, x, y, width, height);
+    (*toCall)(impl->display, impl->window, impl->gc, x, y, width, height);
 }
 
 void XData::drawArc(int x, int y, unsigned int width, unsigned int height,
                 int angle1, int angle2, bool fill) {
     int (*toCall)(Display*, Drawable, GC, int, int, unsigned int, unsigned int, int, int);
     toCall = fill ? &XFillArc : &XDrawArc;
-    (*toCall)(this->display, this->window, this->gc, x, y, width, height, angle1, angle2);
+    (*toCall)(impl->display, impl->window, impl->gc, x, y, width, height, angle1, angle2);
 }
 
 void XData::drawLine(int x1, int y1, int x2, int y2) {
-    XDrawLine(this->display, this->window, this->gc, x1, y1, x2, y2);
+    XDrawLine(impl->display, impl->window, impl->gc, x1, y1, x2, y2);
 }
 
 void XData::clearWindow() {
-   XClearWindow(this->display, this->window);
+   XClearWindow(impl->display, impl->window);
 }
 
 void XData::flushDisplay() {
-   XFlush(this->display);
+   XFlush(impl->display);
 }
 
-bool XData::pending() {
-    return XPending(this->display);
+int XData::eventPending() {
+   if ( XPending(impl->display)) {
+      XNextEvent(impl->display, &(impl->currentEvent));
+      return impl->currentEvent.type;
+   }
+   return false;
 }
 
-XEvent* XData::getNextEvent() {
-   XEvent *event = new XEvent();
-   XNextEvent(this->display, event);
-   return event;
+char XData::getPressedKey() const {
+   const static int BUFFER_SIZE = 10;
+   const static int BAD_RETURN = '\0';
+
+   static char text[BUFFER_SIZE];
+   KeySym key;
+   int i;
+
+   if (impl->currentEvent.type == KeyPress || impl->currentEvent.type == KeyRelease) {
+      i = XLookupString( (XKeyEvent *) &impl->currentEvent, text, BUFFER_SIZE, &key, 0);
+      if (i == 1) {
+         return tolower(text[0]);
+      }
+   }
+   return BAD_RETURN;
+}
+
+int XData::getMouseX() const {
+   return impl->currentEvent.xbutton.x;
+}
+
+int XData::getMouseY() const {
+   return impl->currentEvent.xbutton.y;
 }
 
 void XData::finalCleanup() {
-    XAutoRepeatOn(this->display);
-    XCloseDisplay(this->display);
+    XAutoRepeatOn(impl->display);
+    XCloseDisplay(impl->display);
 }

@@ -9,5 +9,6 @@ nbproject
 *.d
 *.o
 
-# Backup files
+# Backup and temporary files
 *~
+.*.swp

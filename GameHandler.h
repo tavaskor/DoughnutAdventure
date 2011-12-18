@@ -12,7 +12,7 @@ class GameHandler : public EventHandler {
       GameHandler(XData &xdata, GraphicsDrawer &gd, GameModel &gm);
 
    protected:
-      virtual void handleOtherEvents(XEvent &event);
+      virtual void handleOtherEvents(int eventType);
 
    private:
       GameModel &model;

@@ -1,9 +1,4 @@
-// X headers
-
-#include <X11/Xlib.h>
-#include <X11/Xutil.h>
 #include <sys/timeb.h>
-#include <list>
 
 #include "XData.h"
 
