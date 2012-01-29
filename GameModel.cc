@@ -21,7 +21,6 @@ GameModel::GameModel() :
    jumpLengthCounter = 0;
 
    foodgen = new EasyFoodGenerator();
-   pressedKeys = "";
 }
 
 GameModel::~GameModel() {
@@ -65,10 +64,9 @@ void GameModel::advanceTime() {
       }
       updateAllViews();
    }
-   if ( getKeysPressed() != "" ) {
-      checkKeyMoves();
-   }
-   checkJumps();
+	
+	checkDirectionMoves();
+	checkJumps();
 }
 
 void GameModel::decrementAllTimeCounters() {
@@ -86,38 +84,21 @@ void GameModel::decrementIfNonZero(int &counter) {
    }
 }
 
-void GameModel::checkKeyMoves() {
-   if ( checkMove('i', upMoveCounter) ) {
-      // move up?
-   } 
-   if ( checkMove('j', leftMoveCounter) ) {
+void GameModel::checkDirectionMoves() {
+   if ( player.isMoving(LEFT_MOVE) ) {
       if ( player.getLeftX() > 0 ) {
 	 player.increaseX(-BASE_CHANGE_AMT);
       }
    } 
-   if ( checkMove('k', rightMoveCounter) ) {
+   if ( player.isMoving(RIGHT_MOVE) ) {
       if ( player.getLeftX() + player.getWidth() < WINDOW_WIDTH ) {
 	 player.increaseX(BASE_CHANGE_AMT);
       }
-   } 
-   if ( checkMove('m', downMoveCounter) ) {
-      // move down?
    }
-}
-
-bool GameModel::checkMove(char key, int &counter) {
-   const string &keyList = this->getKeysPressed();
-   string::size_type index = keyList.find(key);
-
-   if ( (index != string::npos) && (counter == 0) ) {
-      counter = MOVE_RESET;
-      return true;
-   }
-   return false;
 }
 
 bool GameModel::jumpButtonPressed() {
-   return ( (this->getKeysPressed()).find(' ') != string::npos );
+	return player.isMoving(JUMP);
 }
 
 void GameModel::moveConveyorItems() {
@@ -148,23 +129,6 @@ void GameModel::moveConveyorItems() {
 }
 
 
-
-void GameModel::setKeyPressed(char key) {
-   pressedKeys += key;
-}
-
-void GameModel::setKeyUnpressed(char key) {
-   for (unsigned int i = 0; i < pressedKeys.size(); i++) {
-      if (pressedKeys.at(i) == key) {
-	 pressedKeys.erase(i, 1);
-      }
-   }
-}
-
-std::string GameModel::getKeysPressed() {
-   return pressedKeys;
-}
-
 void GameModel::togglePaused() {
    paused = !paused;
    updateAllViews();
@@ -174,7 +138,7 @@ bool GameModel::gamePaused() {
    return paused;
 }
 
-const Player& GameModel::getPlayer() const {
+Player& GameModel::getPlayer() {
     return player;
 }
 

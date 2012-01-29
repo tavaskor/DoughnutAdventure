@@ -3,14 +3,22 @@
 #ifndef __PLAYER_H__
 #define __PLAYER_H__
 
+#include <map>
 #include "Object.h"
+
+
+enum MoveType {
+	LEFT_MOVE, RIGHT_MOVE, JUMP
+};
 
 class Player : public Object {
    public:
       Player();
-
       void addWeight(int amount);
       int getWeight() const;
+	
+	  void setMoving(MoveType type, bool state);
+	  bool isMoving(MoveType type) const;
 
       static const int START_WEIGHT = 150;
       static const int DEF_X = 0;
@@ -23,6 +31,7 @@ class Player : public Object {
 
    private:
       int weight;
+      std::map<MoveType, bool> currentMoves;
 };
 
 #endif // __PLAYER_H__

@@ -32,21 +32,12 @@ class GameModel : public ModelBase {
       GameDifficulty getDifficulty();
 
 
-      // Adds this key to the set of pressed down keys
-      void setKeyPressed(char key);
-
-      // Removes key from the set of pressed down keys
-      void setKeyUnpressed(char key);
-
-      // Get a list of keys pressed down
-      std::string getKeysPressed();
-
       // Set game paused or unpaused
       void togglePaused();
       bool gamePaused();
       
-      // Access state for the purposes of the view
-      const Player& getPlayer() const;
+      // Access state for the purposes of the view, set state for the controller.
+      Player& getPlayer();
       const std::list<Food>& getFoodList() const;
 
       static const int GAMEOVER_WEIGHT = 100;
@@ -60,13 +51,9 @@ class GameModel : public ModelBase {
 
       void decrementIfNonZero(int &counter);
 
-      // Read keys, take action if necessary
-      void checkKeyMoves();
-      // With special code to check for jumping
+	  // See if the player is currently moving; updated positioning if so.
+      void checkDirectionMoves();
       void checkJumps();
-
-      // Check individual key, returns true if move required
-      bool checkMove(char key, int &counter);
 
       // Check details about jumping for when jump button is pushed
       bool playerOnConveyorBelt();
@@ -94,7 +81,6 @@ class GameModel : public ModelBase {
       bool jumpHasBeenReleased;
 
       FoodGenerator *foodgen;
-      std::string pressedKeys;
 };
 
 #endif // __GAME_MODEL_H__
