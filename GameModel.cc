@@ -62,11 +62,11 @@ void GameModel::advanceTime() {
       } else {
 	 conveyorMoveCounter = CONVEYOR_EASY;
       }
-      updateAllViews();
    }
 	
 	checkDirectionMoves();
 	checkJumps();
+	updateAllViews();
 }
 
 void GameModel::decrementAllTimeCounters() {

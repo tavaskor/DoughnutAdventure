@@ -41,10 +41,9 @@ class GameModel : public ModelBase {
       const std::list<Food>& getFoodList() const;
 
       static const int GAMEOVER_WEIGHT = 100;
-      static const int CONVEYOR_EASY = 10;
-      static const int CONVEYOR_HARD = 5;
-      static const int MOVE_RESET = 3;
-
+      static const int CONVEYOR_EASY = 5;
+      static const int CONVEYOR_HARD = 3;
+	
    private:
       void decrementAllTimeCounters();
       void moveConveyorItems();

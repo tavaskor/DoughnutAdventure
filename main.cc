@@ -13,7 +13,7 @@
 #include "GameDrawer.h"
 
 
-const static unsigned int MILLI_RESOLUTION = 5;
+const static unsigned int MILLI_RESOLUTION = 10;
 
 void gameLoop(XData &xdata);
 void splashScreenLoop(XData &xdata, bool gameStart);
