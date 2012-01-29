@@ -19,6 +19,9 @@ void GameHandler::handleOtherEvents(int eventType) {
          case '2':
             model.setDifficulty(HARD);
             break;
+		 case 'p':
+			  model.togglePaused();
+			 break;
          default:
             model.setKeyPressed(pressedKey);
       }
