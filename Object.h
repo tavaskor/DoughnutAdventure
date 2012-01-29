@@ -18,7 +18,7 @@ class Object {
 
       bool collidesWith(const Object &other) const;
 
-      void increaseX(int amount); // negative to decrease X
+      virtual void increaseX(int amount); // negative to decrease X
       void increaseY(int amount); // negative to decrease Y
       void increaseWidth(int amount);
 

@@ -102,30 +102,37 @@ bool GameModel::jumpButtonPressed() {
 }
 
 void GameModel::moveConveyorItems() {
-   bool doneLoop = false;
-   bool forLoopBreak = false;
-   while (!doneLoop) {
-      for (list<Food>::iterator iter = foodList.begin(); iter != foodList.end();
-	    iter++) {
-	 iter->increaseX(-BASE_CHANGE_AMT);
-	 if ( player.collidesWith(*iter) ) {
-	    player.addWeight( iter->getCollissionModifier() );
-	    foodList.erase(iter);
-	    updateAllViews();
-
-	    // Iterator is no longer valid, so need to restart the for loop.
-	    // Reason: could potentially collide with >1 food, so need to
-	    // check everything.
-	    forLoopBreak = true;
-	    break;
-	 }
-      }
-      if ( forLoopBreak == true ) {
-	 forLoopBreak = false;
-      } else {
-	 doneLoop = true;
-      }
-   }
+	bool doneLoop = false;
+	bool forLoopBreak = false;
+	
+	// If the player is on the conveyor belt, move it first; before checking collissions,
+	// each food will also be moved.
+	if (this->playerOnConveyorBelt()) {
+		player.increaseX(-BASE_CHANGE_AMT);
+	}
+	
+	while (!doneLoop) {
+		for (list<Food>::iterator iter = foodList.begin(); iter != foodList.end();
+			 iter++) {
+			iter->increaseX(-BASE_CHANGE_AMT);
+			if ( player.collidesWith(*iter) ) {
+				player.addWeight( iter->getCollissionModifier() );
+				foodList.erase(iter);
+				updateAllViews();
+				
+				// Iterator is no longer valid, so need to restart the for loop.
+				// Reason: could potentially collide with >1 food, so need to
+				// check everything.
+				forLoopBreak = true;
+				break;
+			}
+		}
+		if ( forLoopBreak == true ) {
+			forLoopBreak = false;
+		} else {
+			doneLoop = true;
+		}
+	}
 }
 
 
@@ -172,6 +179,10 @@ void GameModel::checkJumpHeightIncrease() {
    }
 }
 
+
+// The lowest the player can go without hitting the conveyor belt.
+const static int MIN_PLAYER_Y = 5;
+
 void GameModel::checkJumpHeightDecrease() {
    if ( player.getBottomY() == maxJumpHeight() && jumpLengthCounter == 0) {
       currentlyJumping = false;
@@ -179,10 +190,13 @@ void GameModel::checkJumpHeightDecrease() {
 
    if ( !playerOnConveyorBelt() && ( jumpHasBeenReleased || !jumpButtonPressed() || (!currentlyJumping && jumpLengthCounter == 0) ) ) {
       player.increaseY(-2 * BASE_CHANGE_AMT);
-      if ( player.getBottomY() <= 5 ) {
-	 int yChange = 5 - player.getBottomY();
-	 player.increaseY(yChange);
-	 currentlyJumping = false;
+	   
+	  // If the player is below the conveyor belt, put the player properly on the
+	  // conveyor belt.
+      if ( player.getBottomY() <= MIN_PLAYER_Y ) {
+		  int yChange = MIN_PLAYER_Y - player.getBottomY();
+		  player.increaseY(yChange);
+		  currentlyJumping = false;
       }
    }
    
@@ -201,7 +215,7 @@ int GameModel::minJumpLength() {
 }
 
 int GameModel::maxJumpHeight() {
-   int retVal = 150 - ( player.getWeight() / 2 );
+   int retVal = 300 - player.getWeight();
    if ( retVal > minJumpHeight() ) {
       return retVal;
    }
@@ -217,5 +231,5 @@ int GameModel::maxJumpLength() {
 }
 
 bool GameModel::playerOnConveyorBelt() {
-   return ( player.getBottomY() == 5 );
+   return ( player.getBottomY() == MIN_PLAYER_Y );
 }

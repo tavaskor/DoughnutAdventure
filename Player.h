@@ -17,6 +17,9 @@ class Player : public Object {
       void addWeight(int amount);
       int getWeight() const;
 	
+	  // This object cannot escape screen bounds; it will be treated specially.
+	  virtual void increaseX(int amount);
+	
 	  void setMoving(MoveType type, bool state);
 	  bool isMoving(MoveType type) const;
 

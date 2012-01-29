@@ -13,6 +13,15 @@ int Player::getWeight() const {
    return weight;
 }
 
+void Player::increaseX(int amount) {
+	Object::increaseX(amount);
+	
+	int currX = getLeftX();
+	if (currX < 0) {
+		increaseX(-currX);
+	}
+}
+
 void Player::setMoving(MoveType type, bool state) {
 	currentMoves[type] = state;
 }
