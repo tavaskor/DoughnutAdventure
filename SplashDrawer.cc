@@ -34,21 +34,24 @@ void SplashDrawer::drawImmediateInstructions() {
 }
 
 
+
 void SplashDrawer::drawGameText() {
+	const static char* opening_lines[] = {
+		"Game play instructions:",
+		"Press j and k to move left and right.  Press spacebar to jump.",
+		"Press 1 to set the difficulty to easy or 2 to set the difficulty to hard.",
+		"Press p to pause, or q to quit at any time.",
+		"The game ends when your weight drops below 100 pounds.",
+		"Doughnuts increase your weight; all other foods decrease it."
+	};
+	
    xdat.setFont("-*-helvetica-*-r-*-*-12-*-*-*-*-*-*-*");
 
-   const int NUM_STRINGS = 6;
-   string *lines = new string[NUM_STRINGS];
-   lines[0] = "Game play instructions:";
-   lines[1] = "Press j and k to move left and right.  Press spacebar to jump.";
-   lines[2] = "Press 1 to set the difficulty to easy or 2 to set the difficulty to hard.";
-   lines[3] = "Press p to pause, or q to quit at any time.";
-   lines[4] = "The game ends when your weight drops below 100 pounds.";
-   lines[5] = "Doughnuts increase your weight; all other foods decrease it.";
+	const size_t NUM_STRINGS = sizeof(opening_lines) / sizeof(opening_lines[0]);
 
-   for (int i = 0; i < NUM_STRINGS; i++) {
-      const char* label = lines[i].c_str();
-      xdat.drawString(label, 130 + (20 * i), CENTRE);
+   for (size_t i = 0; i < NUM_STRINGS; i++) {
+	   const char* label = opening_lines[i];
+	   xdat.drawString(label, 130 + (20 * i), CENTRE);
    }
 }
 

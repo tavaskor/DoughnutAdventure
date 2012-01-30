@@ -1,62 +1,16 @@
 #include "XData.h"
 
-#include <X11/Xlib.h>
-#include <X11/Xutil.h>
-#include <iostream>
-
+#include "XDataImplementation.h"
 #include "WindowConstants.h"
 #include "EasyFoodGenerator.h"
 
-struct XDataImplementation {
-   Display *display;
-   Window window;
-   GC gc;
-
-   XFontStruct *currentFont;
-   XEvent currentEvent;
-};
+#include <X11/Xlib.h>
+#include <X11/Xutil.h>
+#include <cstring>
+#include <cctype>
 
 XData::XData(int argc, char **argv, int border_width) : 
-        impl(new XDataImplementation()) {
-   // Open the display first
-   impl->display = XOpenDisplay("");
-   if ( !impl->display ) {
-      std::cerr << "Unable to open the display." << std::endl;
-      exit(0);
-   }
-
-   // Get the default screen
-   int screen = DefaultScreen(impl->display);
-
-   // Get the background and foreground colours
-   unsigned long background = BlackPixel(impl->display, screen);
-   unsigned long foreground = WhitePixel(impl->display, screen);
-
-   // Set up size and location of window
-   XSizeHints hints;
-   int displayWidth = DisplayWidth(impl->display, screen);
-   int displayHeight = DisplayHeight(impl->display, screen);
-
-   hints.width = WINDOW_WIDTH;
-   hints.height = WINDOW_HEIGHT;
-   hints.x = displayWidth / 2 - WINDOW_WIDTH / 2;
-   hints.y = displayHeight / 2 - WINDOW_HEIGHT / 2;
-   hints.flags = PPosition | PSize;
-
-   // Create a simple window, and set the basic properties of it
-   impl->window = XCreateSimpleWindow(impl->display,
-	 DefaultRootWindow( impl->display ), hints.x, hints.y,
-	 hints.width, hints.height, border_width, foreground, background );
-   XSetStandardProperties( impl->display, impl->window, 
-	 "Doughnut Adventure", "Doughnut Adventure",
-	 None, NULL, 0, &hints );
-
-   // Next, create a graphics context and set the colours that are going
-   // to be used for drawing
-   impl->gc = XCreateGC (impl->display, impl->window, 0, 0 );
-   XSetBackground(impl->display, impl->gc, background);
-   XSetForeground(impl->display, impl->gc, foreground);
-
+        impl(new XDataImplementation(border_width)) {
    XMapRaised(impl->display, impl->window);
    XFlush(impl->display);  // Doesn't display without this
 
@@ -75,8 +29,7 @@ XData::~XData() {
 }
 
 void XData::setFont(const char *font_name) {
-   impl->currentFont = XLoadQueryFont(impl->display, font_name);
-   XSetFont(impl->display, impl->gc, impl->currentFont->fid);
+	impl->setFont(font_name);
 }
 
 int XData::currentFontHeight() {

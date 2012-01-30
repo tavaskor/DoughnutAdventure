@@ -102,9 +102,6 @@ bool GameModel::jumpButtonPressed() {
 }
 
 void GameModel::moveConveyorItems() {
-	bool doneLoop = false;
-	bool forLoopBreak = false;
-	
 	// If the player is on the conveyor belt, move it first; before checking collissions,
 	// each food will also be moved.
 	if (this->playerOnConveyorBelt()) {

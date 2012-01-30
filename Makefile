@@ -10,7 +10,7 @@ ALL_OBJS=${A1MAINOBJS} ${AFTEROBJS}
 ALL_SRC=${ALL_OBJS:.o=.cc}
 ALL_DEPS=${ALL_OBJS:.o=.d}
 
-A1MAINOBJS=main.o XData.o ${EVENTOBJS} ${DRAWOBJS} ${MODELOBJS}
+A1MAINOBJS=main.o XData.o XDataImplementation.o ${EVENTOBJS} ${DRAWOBJS} ${MODELOBJS}
 EVENTOBJS=EventHandler.o SplashHandler.o GameHandler.o
 DRAWOBJS=GraphicsDrawer.o SplashDrawer.o GameDrawer.o \
 	 StartDrawer.o GameOverDrawer.o
