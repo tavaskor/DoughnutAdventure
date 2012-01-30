@@ -111,26 +111,15 @@ void GameModel::moveConveyorItems() {
 		player.increaseX(-BASE_CHANGE_AMT);
 	}
 	
-	while (!doneLoop) {
-		for (list<Food>::iterator iter = foodList.begin(); iter != foodList.end();
-			 iter++) {
-			iter->increaseX(-BASE_CHANGE_AMT);
-			if ( player.collidesWith(*iter) ) {
-				player.addWeight( iter->getCollissionModifier() );
-				foodList.erase(iter);
-				updateAllViews();
-				
-				// Iterator is no longer valid, so need to restart the for loop.
-				// Reason: could potentially collide with >1 food, so need to
-				// check everything.
-				forLoopBreak = true;
-				break;
-			}
-		}
-		if ( forLoopBreak == true ) {
-			forLoopBreak = false;
+	list<Food>::iterator foodCheck = foodList.begin();
+	while (foodCheck != foodList.end()) {
+		foodCheck->increaseX(-BASE_CHANGE_AMT);
+		if ( player.collidesWith(*foodCheck) ) {
+			player.addWeight( foodCheck->getCollissionModifier() );
+			foodCheck = foodList.erase(foodCheck);
+			updateAllViews();
 		} else {
-			doneLoop = true;
+			foodCheck++;
 		}
 	}
 }
