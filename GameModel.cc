@@ -55,12 +55,12 @@ void GameModel::advanceTime() {
    if ( conveyorMoveCounter == 0 ) {
       moveConveyorItems();
       if ( foodgen->nextFoodReady() ) {
-	 foodList.push_back(foodgen->getNextFood());
+		  foodList.push_back(foodgen->getNextFood());
       }
       if ( this->getDifficulty() == HARD ) {
-	 conveyorMoveCounter = CONVEYOR_HARD;
+		  conveyorMoveCounter = CONVEYOR_HARD;
       } else {
-	 conveyorMoveCounter = CONVEYOR_EASY;
+		  conveyorMoveCounter = CONVEYOR_EASY;
       }
    }
 	
@@ -117,7 +117,6 @@ void GameModel::moveConveyorItems() {
 		if ( player.collidesWith(*foodCheck) ) {
 			player.addWeight( foodCheck->getCollissionModifier() );
 			foodCheck = foodList.erase(foodCheck);
-			updateAllViews();
 		} else {
 			foodCheck++;
 		}
