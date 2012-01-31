@@ -38,7 +38,7 @@ class GameModel : public ModelBase {
       
       // Access state for the purposes of the view, set state for the controller.
       Player& getPlayer();
-      const std::list<Food>& getFoodList() const;
+      const std::list<Food*>& getFoodList() const;
 
       static const int GAMEOVER_WEIGHT = 100;
       static const int CONVEYOR_EASY = 5;
@@ -74,7 +74,7 @@ class GameModel : public ModelBase {
 
       Player player;
       GameDifficulty currDiff;
-      std::list<Food> foodList;
+      std::list<Food*> foodList;
       bool paused;
       bool currentlyJumping;
       bool jumpHasBeenReleased;

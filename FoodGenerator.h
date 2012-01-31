@@ -17,7 +17,7 @@ class FoodGenerator {
       virtual ~FoodGenerator();
 
       bool nextFoodReady();
-      Food getNextFood();
+      Food* getNextFood();
 
    protected:
       // Return a random number between 0 and 1, selected from a 
@@ -33,7 +33,7 @@ class FoodGenerator {
 
    private:
       // Selects a food to be returned to the game
-      virtual FoodType pickFoodType();
+      virtual Food* pickFoodType();
 
       double p_doughnut;
       double p_cheese;

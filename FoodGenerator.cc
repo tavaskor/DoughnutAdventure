@@ -32,22 +32,28 @@ bool FoodGenerator::nextFoodReady() {
    return getRandomNumber() < nextFoodProbability();
 }
 
-Food FoodGenerator::getNextFood() {
-   Food theFood(WINDOW_WIDTH + 10, 5, this->pickFoodType());
-   lastFoodBuffer = theFood.getWidth() + getExtraFoodBuffer();
-   return theFood;
+Food* FoodGenerator::getNextFood() {
+   //Food theFood(WINDOW_WIDTH + 10, 5, this->pickFoodType());
+	
+	// Restart the buffer for the next food.
+	Food *theFood = pickFoodType();
+	lastFoodBuffer = theFood->getWidth() + getExtraFoodBuffer();
+	return theFood;
 }
 
-FoodType FoodGenerator::pickFoodType() {
+Food* FoodGenerator::pickFoodType() {
+	const static int X = WINDOW_WIDTH + 10;
+	const static int Y = 5; // Magic conveyor belt height...
+	
    float foodSelector = this->getRandomNumber();
    if (foodSelector < p_doughnut) {
-      return DOUGHNUT;
+      return new Doughnut(X, Y);
    } else if (foodSelector < p_cheese) {
-      return CHEESE;
+      return new Cheese(X, Y);
    } else if (foodSelector < p_carrot) {
-      return CARROT;
+      return new Carrot(X, Y);
    } else {
-      return CELERY;
+      return new Celery(X, Y);
    }
 }
 

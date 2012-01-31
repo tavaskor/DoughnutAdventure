@@ -47,24 +47,24 @@ void GameDrawer::drawPlayer() {
 }
 
 void GameDrawer::drawFood() {
-   for (std::list<Food>::const_iterator iter = foodList.begin();
+   for (std::list<Food*>::const_iterator iter = foodList.begin();
 	 iter != foodList.end(); iter++) {
-      switch ( iter->getFoodType() ) {
+      switch ( (*iter)->getFoodType() ) {
 	 case DOUGHNUT:
-	    this->drawDoughnut(*iter);
+	    this->drawDoughnut(**iter);
 	    break;
 	 case CHEESE:
-	    this->drawCheese(*iter);
+	    this->drawCheese(**iter);
 	    break;
 	 case CELERY:
-	    this->drawCelery(*iter);
+	    this->drawCelery(**iter);
 	    break;
 	 case CARROT:
-	    this->drawCarrot(*iter);
+	    this->drawCarrot(**iter);
 	    break;
 	 default:
-	    this->drawRectangle( iter->getLeftX(), iter->getBottomY(),
-		  iter->getWidth(), iter->getHeight() );
+	    this->drawRectangle( (*iter)->getLeftX(), (*iter)->getBottomY(),
+		  (*iter)->getWidth(), (*iter)->getHeight() );
 	    break;
       }
    }
@@ -93,14 +93,14 @@ void GameDrawer::drawCheese(const Object &cheese) {
 }
 
 void GameDrawer::drawCelery(const Object &celery) {
-   this->drawRectangle( celery.getLeftX(), celery.getBottomY(),
-	 celery.getWidth(), celery.getHeight() );
-   this->drawLine( celery.getLeftX(), 
-	 celery.getBottomY() + ( celery.getHeight() / 4 ),
-	 celery.getLeftX() + celery.getWidth(),
-	 celery.getBottomY() + ( celery.getHeight() / 4 ) );
-   this->drawLine( celery.getLeftX(),
-	 celery.getBottomY() + ( celery.getHeight() * 3 / 4 ),
+	this->drawRectangle( celery.getLeftX(), celery.getBottomY(),
+						celery.getWidth(), celery.getHeight() );
+	this->drawLine( celery.getLeftX(), 
+				   celery.getBottomY() + ( celery.getHeight() / 4 ),
+				   celery.getLeftX() + celery.getWidth(),
+				   celery.getBottomY() + ( celery.getHeight() / 4 ) );
+	this->drawLine( celery.getLeftX(),
+				   celery.getBottomY() + ( celery.getHeight() * 3 / 4 ),
 	 celery.getLeftX() + celery.getWidth(),
 	 celery.getBottomY() + ( celery.getHeight() * 3 / 4 ) );
 }

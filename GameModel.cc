@@ -24,7 +24,14 @@ GameModel::GameModel() :
 }
 
 GameModel::~GameModel() {
-   delete foodgen;
+	// There will be one active FoodGenerator; make sure its memory is reclaimed.
+	delete foodgen;
+	
+	// It is also necessary to remove any remaining food items that are still on
+	// the conveyor belt at the end of the game.
+	for (std::list<Food*>::iterator it = foodList.begin(); it != foodList.end(); it++) {
+		delete *it;
+	}
 }
 
 bool GameModel::gameOver() const {
@@ -52,6 +59,7 @@ GameDifficulty GameModel::getDifficulty() {
 
 void GameModel::advanceTime() {
    decrementAllTimeCounters();
+	
    if ( conveyorMoveCounter == 0 ) {
       moveConveyorItems();
       if ( foodgen->nextFoodReady() ) {
@@ -108,15 +116,27 @@ void GameModel::moveConveyorItems() {
 		player.increaseX(-BASE_CHANGE_AMT);
 	}
 	
-	list<Food>::iterator foodCheck = foodList.begin();
+	list<Food*>::iterator foodCheck = foodList.begin();
 	while (foodCheck != foodList.end()) {
-		foodCheck->increaseX(-BASE_CHANGE_AMT);
-		if ( player.collidesWith(*foodCheck) ) {
-			player.addWeight( foodCheck->getCollissionModifier() );
+		(*foodCheck)->increaseX(-BASE_CHANGE_AMT);
+		if ( player.collidesWith(**foodCheck) ) {
+			// Add/remove weight based on the food.
+			player.addWeight( (*foodCheck)->getCollissionModifier() );
+			
+			// Delete the heap-allocated storage, and then remove the pointer
+			// from the food list.
+			delete (*foodCheck);
 			foodCheck = foodList.erase(foodCheck);
 		} else {
 			foodCheck++;
 		}
+	}
+	
+	// Remove any food that has fallen off the edge.
+	Food *frontFood = *(foodList.begin());
+	if ((!foodList.empty()) && (frontFood->getLeftX() < 0 - frontFood->getWidth())) {
+		delete frontFood;
+		foodList.erase(foodList.begin());
 	}
 }
 
@@ -134,7 +154,7 @@ Player& GameModel::getPlayer() {
     return player;
 }
 
-const std::list<Food>& GameModel::getFoodList() const {
+const std::list<Food*>& GameModel::getFoodList() const {
     return foodList;
 }
 
@@ -192,7 +212,7 @@ void GameModel::checkJumpHeightDecrease() {
 }
 
 int GameModel::minJumpHeight() {
-   return Food::getHeight(CARROT) + 6;
+	return Food::getMaxFoodHeight() + 6;
 }
 
 int GameModel::minJumpLength() {

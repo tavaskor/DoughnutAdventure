@@ -35,7 +35,7 @@ class GameDrawer : public GraphicsDrawer {
 
       GameModel &model;
       const Player &player;
-      const std::list<Food> &foodList;
+      const std::list<Food*> &foodList;
 };
 
 #endif // __GAME_DRAWER_H__
